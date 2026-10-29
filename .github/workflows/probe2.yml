@@ -1,0 +1,10 @@
+name: probe2
+on:
+  workflow_dispatch:
+jobs:
+  selfcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: probe
+        run: echo "RUNNER=$RUNNER_NAME && id && ls -la /home/runner/work && env | sort | head -40
