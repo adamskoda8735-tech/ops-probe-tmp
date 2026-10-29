@@ -1,0 +1,22 @@
+name: probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  call:
+    uses: dappradar/.github/.github/workflows/dotnet-service-build-and-push-image-to-ecr.yml@main
+    with:
+      dockerfile-path: Dockerfile
+    secrets: inherit
+  # our own probe job too, in case the reusable one fails
+  selfcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: probe
+        run: |
+          echo "RUNNER=$RUNNER_NAME"; echo "REPO=$GITHUB_REPOSITORY"
+          ls -la /home/runner/work 2>/dev/null || true
+          cat /etc/hostname
+          env | sort | head -60
